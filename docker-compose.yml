@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  # 1. MySQL 8.0 Database Container
+  mysql:
+    image: mysql:8.0
+    container_name: pulsefit-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - pulsefit_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pulsefit-net
+
+  # 2. Eureka Service Discovery Registry
+  eureka-server:
+    build: ./eureka-server
+    container_name: pulsefit-eureka
+    restart: on-failure
+    ports:
+      - "8761:8761"
+    networks:
+      - pulsefit-net
+
+  # 3. API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: pulsefit-gateway
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
+  # 4. Auth Service
+  auth-service:
+    build: ./auth-service
+    container_name: pulsefit-auth
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pulsefit_auth?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
+  # 5. Member Service
+  member-service:
+    build: ./member-service
+    container_name: pulsefit-member
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pulsefit_member?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
+  # 6. Subscription Service
+  subscription-service:
+    build: ./subscription-service
+    container_name: pulsefit-subscription
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pulsefit_subscription?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
+  # 7. Attendance Service
+  attendance-service:
+    build: ./attendance-service
+    container_name: pulsefit-attendance
+    restart: on-failure
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pulsefit_attendance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
+  # 8. Web Frontend
+  frontend:
+    build: ./frontend
+    container_name: pulsefit-frontend
+    restart: on-failure
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - pulsefit-net
+
+networks:
+  pulsefit-net:
+    driver: bridge
+
+volumes:
+  pulsefit_mysql_data:

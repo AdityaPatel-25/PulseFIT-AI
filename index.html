@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseFIT AI - Multi-Facility Fitness Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #090d16;
+      --bg-card: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-green: #10b981;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-red: #ef4444;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .glass-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+    .btn-accent {
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      color: white;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .input-field {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .input-field:focus { border-color: var(--accent-green); }
+    .turnstile-arm {
+      transform-origin: left center;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .turnstile-arm.open { transform: rotate(85deg); }
+    .turnstile-arm.closed { transform: rotate(0deg); }
+    .custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .custom-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .custom-table td { padding: 14px 16px; font-size: 0.88rem; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+    .custom-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body>
+
+  <!-- Live Event Ticker -->
+  <div style="background: #030712; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 6px 24px; font-size: 0.72rem; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="color: #10b981; font-weight: 700;">● LIVE TELEMETRY</span>
+      <span style="color: #64748b;">|</span>
+      <span>API Gateway: <strong>http://localhost:8080</strong></span>
+      <span style="color: #64748b;">•</span>
+      <span>Service Mesh: <strong>Subscription ➔ Attendance ➔ Member</strong></span>
+      <span style="color: #64748b;">•</span>
+      <span style="color: #38bdf8;">Eureka Registry: 5 Services Connected</span>
+    </div>
+    <div class="font-mono" style="color: #94a3b8;" id="clockDisplay"></div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header style="border-bottom: 1px solid var(--border-color); background: rgba(9, 13, 22, 0.9); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 50;">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 70px; display: flex; align-items: center; justify-content: space-between;">
+      
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.3rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PulseFIT</span>
+            <span class="badge badge-green">SOA Enterprise</span>
+          </div>
+          <p style="font-size: 0.7rem; color: var(--text-muted);">Multi-Facility Platform</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav style="display: flex; gap: 6px;">
+        <button onclick="switchTab('turnstile')" id="tab-turnstile" class="btn" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-bottom: 2px solid #10b981;">
+          Turnstile Scanner
+        </button>
+        <button onclick="switchTab('members')" id="tab-members" class="btn" style="background: transparent; color: var(--text-muted);">
+          Members
+        </button>
+        <button onclick="switchTab('subscriptions')" id="tab-subscriptions" class="btn" style="background: transparent; color: var(--text-muted);">
+          Subscriptions
+        </button>
+        <button onclick="switchTab('attendance')" id="tab-attendance" class="btn" style="background: transparent; color: var(--text-muted);">
+          Attendance Logs
+        </button>
+        <button onclick="switchTab('mesh')" id="tab-mesh" class="btn" style="background: transparent; color: var(--text-muted);">
+          Service Mesh
+        </button>
+      </nav>
+
+      <!-- Role / User Info -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="text-align: right;">
+          <p style="font-size: 0.85rem; font-weight: 700;" id="userDisplay">admin</p>
+          <span class="badge badge-purple" id="roleDisplay">ROLE_ADMIN</span>
+        </div>
+        <button onclick="toggleAudio()" id="audioBtn" class="btn btn-secondary" style="padding: 8px 12px;" title="Toggle Sound FX">
+          🔊 Sound: ON
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main style="flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 32px 24px;">
+
+    <!-- TAB 1: TURNSTILE SIMULATOR -->
+    <div id="view-turnstile" style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px;">
+      
+      <!-- Left: Physical Gate Graphic -->
+      <div class="glass-panel" style="padding: 32px; display: flex; flexDirection: column; align-items: center;">
+        
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <span class="badge badge-cyan" style="font-size: 0.68rem;">IoT Turnstile Gate</span>
+            <h2 style="font-size: 1.3rem; font-weight: 800; margin-top: 4px;">Entry Turnstile Terminal</h2>
+          </div>
+          <span id="barrierBadge" class="badge badge-amber">BARRIER LOCKED</span>
+        </div>
+
+        <!-- Terminal Cabinet -->
+        <div style="width: 100%; max-width: 500px; background: #080d19; border-radius: 24px; padding: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+          
+          <!-- LCD Screen -->
+          <div id="lcdScreen" style="background: #020617; border-radius: 16px; padding: 18px 24px; border: 2px solid #1e293b; margin-bottom: 24px; text-align: center; min-height: 90px; display: flex; flex-direction: column; justify-content: center; transition: all 0.3s ease;">
+            <p style="font-size: 0.68rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px;" id="lcdLocation">
+              PULSEFIT DOWNTOWN ELITE • GATE-01A
+            </p>
+            <p id="lcdMessage" style="color: #94a3b8; font-weight: 700; font-size: 1.05rem;">
+              PLEASE SWIPE OR TAP RFID ACCESS PASS
+            </p>
+          </div>
+
+          <!-- Gate Mechanism -->
+          <div style="display: flex; justify-content: space-between; align-items: center; height: 190px; padding: 0 20px; position: relative;">
+            
+            <!-- Left Pillar -->
+            <div style="width: 76px; height: 170px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 16px 0; border: 1px solid rgba(255,255,255,0.12);">
+              <div id="leftLed" style="width: 20px; height: 20px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 16px #ef4444; border: 2px solid rgba(255,255,255,0.4);"></div>
+              <div style="width: 52px; height: 52px; border-radius: 10px; background: rgba(0,0,0,0.5); border: 1px dashed rgba(255,255,255,0.25); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg>
+                <span style="font-size: 0.55rem; color: #64748b; font-weight: 800;">NFC</span>
+              </div>
+              <span style="font-size: 0.62rem; color: var(--text-dim); font-weight: 800;">STANCHION-A</span>
+            </div>
+
+            <!-- Central Arm & Hub -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative; height: 100%;">
+              <div id="turnstileArm" class="turnstile-arm closed" style="width: 160px; height: 16px; background: linear-gradient(90deg, #ef4444, #f87171); border-radius: 8px; box-shadow: 0 0 20px rgba(239,68,68,0.5); position: absolute; left: 10px; z-index: 5;"></div>
+              
+              <div id="centerHub" style="z-index: 10; width: 60px; height: 60px; border-radius: 50%; background: #090d16; border: 3px solid #374151; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.8);">
+                <span id="hubIcon" style="font-size: 1.5rem;">🔒</span>
+              </div>
+            </div>
+
+            <!-- Right Pillar -->
+            <div style="width: 76px; height: 170px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 16px 0; border: 1px solid rgba(255,255,255,0.12);">
+              <div id="rightLed" style="width: 20px; height: 20px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 16px #ef4444; border: 2px solid rgba(255,255,255,0.4);"></div>
+              <span style="font-size: 0.65rem; color: var(--text-dim); text-align: center;">OPTICAL<br>EXIT</span>
+              <span style="font-size: 0.62rem; color: var(--text-dim); font-weight: 800;">STANCHION-B</span>
+            </div>
+
+          </div>
+
+          <!-- Telemetry -->
+          <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+            <span>Gate Latency: <strong id="latencyDisplay" style="color: #f3f4f6;">—</strong></span>
+            <span>Security: <strong style="color: #34d399;">JWT Bearer Verified</strong></span>
+            <span>Feign Mesh: <strong style="color: #38bdf8;">Eureka Connected</strong></span>
+          </div>
+
+        </div>
+
+        <!-- Check-Out Station Banner -->
+        <div id="checkoutBox" style="display: none; width: 100%; max-width: 500px; margin-top: 20px; padding: 14px 20px; background: rgba(16, 185, 129, 0.1); border-radius: 14px; border: 1px solid rgba(16, 185, 129, 0.3); justify-content: space-between; align-items: center;">
+          <div>
+            <p style="font-weight: 700; font-size: 0.88rem; color: #34d399;">Session Active</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);" id="checkoutSubtext"></p>
+          </div>
+          <button onclick="performCheckOut()" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;">
+            Check-Out
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right: Facility & Swiping Controls -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Facility Switcher -->
+        <div class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 12px;">Select Facility Gate</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="selectFacility('FACILITY_DOWNTOWN', 'PulseFit Downtown Elite', 94, 150)" id="fac-downtown" class="btn" style="justify-content: space-between; background: rgba(6,182,212,0.15); border: 1px solid #06b6d4; color: var(--text-main); text-align: left;">
+              <div>
+                <strong>PulseFit Downtown Elite</strong>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Downtown Financial District</p>
+              </div>
+              <span class="badge badge-cyan">94/150 INSIDE</span>
+            </button>
+            <button onclick="selectFacility('FACILITY_UPTOWN', 'PulseFit Uptown Olympic', 68, 200)" id="fac-uptown" class="btn btn-secondary" style="justify-content: space-between; text-align: left;">
+              <div>
+                <strong>PulseFit Uptown Olympic</strong>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Olympic Pool & Spa</p>
+              </div>
+              <span class="badge badge-cyan">68/200 INSIDE</span>
+            </button>
+            <button onclick="selectFacility('FACILITY_WESTSIDE', 'PulseFit Westside Express', 42, 80)" id="fac-westside" class="btn btn-secondary" style="justify-content: space-between; text-align: left;">
+              <div>
+                <strong>PulseFit Westside Express</strong>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Express Studio</p>
+              </div>
+              <span class="badge badge-cyan">42/80 INSIDE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 Test RFID Cards -->
+        <div class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px;">Simulated RFID Cards</h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">
+            Click Swipe to trigger real-time OpenFeign validation across services:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            
+            <!-- Alex Mercer -->
+            <div style="padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <strong style="font-size: 0.92rem;">Alex Mercer</strong>
+                <span style="font-size: 0.72rem; color: var(--text-dim);">(ID #1)</span>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Active VIP Pass (Annual)</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge badge-green">EXPECT GRANTED</span>
+                <button onclick="swipeCard(1, 'Alex Mercer')" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.8rem;">
+                  Swipe Pass ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- Sarah Connor -->
+            <div style="padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <strong style="font-size: 0.92rem;">Sarah Connor</strong>
+                <span style="font-size: 0.72rem; color: var(--text-dim);">(ID #2)</span>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Active Premium (Quarterly)</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge badge-green">EXPECT GRANTED</span>
+                <button onclick="swipeCard(2, 'Sarah Connor')" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.8rem;">
+                  Swipe Pass ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- Marcus Vance (EXPIRED) -->
+            <div style="padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <strong style="font-size: 0.92rem;">Marcus Vance</strong>
+                <span style="font-size: 0.72rem; color: var(--text-dim);">(ID #3)</span>
+                <p style="font-size: 0.74rem; color: #f87171;">Expired Basic Monthly Pass</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge badge-red">EXPECT DENIED</span>
+                <button onclick="swipeCard(3, 'Marcus Vance')" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.8rem; background: #dc2626;">
+                  Swipe Pass ➔
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Custom ID Entry -->
+          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; gap: 10px;">
+            <input type="number" id="customMemberId" min="1" value="1" class="input-field" style="width: 120px;" placeholder="ID...">
+            <button onclick="swipeCard(document.getElementById('customMemberId').value, 'Custom Member')" class="btn btn-accent" style="flex: 1;">
+              Swipe Custom Member ID
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: MEMBERS -->
+    <div id="view-members" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800;">Member Directory</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Served by Member Service (:8082)</p>
+        </div>
+        <button onclick="loadMembers()" class="btn btn-secondary">🔄 Refresh</button>
+      </div>
+
+      <div class="glass-panel" style="overflow: hidden;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Member ID</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="membersTableBody">
+            <tr><td colspan="6" style="text-align: center; padding: 30px;">Loading members...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: SUBSCRIPTIONS -->
+    <div id="view-subscriptions" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800;">Subscription & Plan Lifecycle</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Served by Subscription Service (:8083)</p>
+        </div>
+        <button onclick="loadSubscriptions()" class="btn btn-secondary">🔄 Refresh</button>
+      </div>
+
+      <div class="glass-panel" style="overflow: hidden;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Sub ID</th>
+              <th>Member ID</th>
+              <th>Plan Type</th>
+              <th>Start Date</th>
+              <th>Expiry Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="subscriptionsTableBody">
+            <tr><td colspan="7" style="text-align: center; padding: 30px;">Loading subscriptions...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: ATTENDANCE LOGS -->
+    <div id="view-attendance" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800;">Live Turnstile Attendance Logs</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Served by Attendance Service (:8084)</p>
+        </div>
+        <button onclick="loadAttendance()" class="btn btn-secondary">🔄 Refresh</button>
+      </div>
+
+      <div class="glass-panel" style="overflow: hidden;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Log ID</th>
+              <th>Member ID</th>
+              <th>Facility</th>
+              <th>Check-In Time</th>
+              <th>Check-Out</th>
+              <th>Decision</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody">
+            <tr><td colspan="7" style="text-align: center; padding: 30px;">Loading attendance logs...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: SERVICE MESH -->
+    <div id="view-mesh" style="display: none;">
+      <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 16px;">Microservices Architecture Topology</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8761</span>
+          <h3 style="margin-top: 6px;">Eureka Server</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Service Discovery Registry</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8080</span>
+          <h3 style="margin-top: 6px;">API Gateway</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">JWT Filter & Load Balancer</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8081</span>
+          <h3 style="margin-top: 6px;">Auth Service</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">JWT Token Generator</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8082</span>
+          <h3 style="margin-top: 6px;">Member Service</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Member Profiles DB</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8083</span>
+          <h3 style="margin-top: 6px;">Subscription Service</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Plans & Renewals</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+        <div class="glass-panel" style="padding: 20px;">
+          <span class="badge badge-purple">Port 8084</span>
+          <h3 style="margin-top: 6px;">Attendance Service</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Turnstile Engine</p>
+          <span class="badge badge-green" style="margin-top: 10px;">CONNECTED</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const API_BASE = 'http://localhost:8080';
+    let currentFacilityId = 'FACILITY_DOWNTOWN';
+    let currentFacilityName = 'PulseFit Downtown Elite';
+    let jwtToken = '';
+    let soundEnabled = true;
+    let activeAttendanceId = null;
+
+    // Clock
+    setInterval(() => {
+      document.getElementById('clockDisplay').textContent = new Date().toLocaleTimeString();
+    }, 1000);
+
+    // Web Audio Synthesizer
+    let audioCtx = null;
+    function playChime(freq1, freq2) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(freq1, now);
+        osc.frequency.exponentialRampToValueAtTime(freq2, now + 0.25);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('audioBtn').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+    }
+
+    // Auto-login to obtain JWT
+    async function autoLogin() {
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'admin', password: 'admin123' })
+        });
+        const data = await res.json();
+        if (data.token) {
+          jwtToken = data.token;
+          console.log('JWT Token retrieved successfully');
+        }
+      } catch (err) {
+        console.warn('Backend login warning:', err);
+      }
+    }
+    autoLogin();
+
+    // Facility selector
+    function selectFacility(id, name, occ, cap) {
+      currentFacilityId = id;
+      currentFacilityName = name;
+      document.getElementById('lcdLocation').textContent = `${name.toUpperCase()} • GATE-01A`;
+      ['downtown', 'uptown', 'westside'].forEach(f => {
+        const btn = document.getElementById(`fac-${f}`);
+        if (id.toLowerCase().includes(f)) {
+          btn.style.background = 'rgba(6,182,212,0.15)';
+          btn.style.border = '1px solid #06b6d4';
+        } else {
+          btn.style.background = 'rgba(255,255,255,0.02)';
+          btn.style.border = '1px solid var(--border-color)';
+        }
+      });
+    }
+
+    // Swipe Card at Turnstile
+    async function swipeCard(mId, name) {
+      const lcdMsg = document.getElementById('lcdMessage');
+      const arm = document.getElementById('turnstileArm');
+      const leftLed = document.getElementById('leftLed');
+      const rightLed = document.getElementById('rightLed');
+      const hubIcon = document.getElementById('hubIcon');
+      const badge = document.getElementById('barrierBadge');
+      const latencyDisplay = document.getElementById('latencyDisplay');
+
+      lcdMsg.textContent = 'CHECKING SUBSCRIPTION & PROFILE...';
+      lcdMsg.style.color = '#38bdf8';
+
+      const startTime = performance.now();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/attendance/check-in`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': jwtToken ? `Bearer ${jwtToken}` : ''
+          },
+          body: JSON.stringify({
+            memberId: Number(mId),
+            facilityId: currentFacilityId,
+            facilityName: currentFacilityName
+          })
+        });
+
+        const data = await res.json();
+        const duration = Math.round(performance.now() - startTime);
+        latencyDisplay.textContent = `${duration} ms`;
+
+        if (data.granted) {
+          // ACCESS GRANTED
+          playChime(880, 1320);
+          lcdMsg.textContent = `ACCESS GRANTED - Welcome ${data.memberName || name}!`;
+          lcdMsg.style.color = '#34d399';
+          document.getElementById('lcdScreen').style.borderColor = '#10b981';
+          
+          arm.className = 'turnstile-arm open';
+          arm.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+          arm.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.7)';
+          
+          leftLed.style.background = '#10b981';
+          leftLed.style.boxShadow = '0 0 20px #10b981';
+          rightLed.style.background = '#10b981';
+          rightLed.style.boxShadow = '0 0 20px #10b981';
+          
+          hubIcon.textContent = '🔓';
+          badge.className = 'badge badge-green';
+          badge.textContent = 'BARRIER OPEN';
+
+          activeAttendanceId = data.attendanceId;
+          document.getElementById('checkoutBox').style.display = 'flex';
+          document.getElementById('checkoutSubtext').textContent = `Member ${name} (ID #${mId}) is inside.`;
+
+        } else {
+          // ACCESS DENIED
+          playChime(300, 150);
+          lcdMsg.textContent = data.message || 'ACCESS DENIED';
+          lcdMsg.style.color = '#f87171';
+          document.getElementById('lcdScreen').style.borderColor = '#ef4444';
+
+          arm.className = 'turnstile-arm closed';
+          arm.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+          arm.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
+
+          leftLed.style.background = '#ef4444';
+          leftLed.style.boxShadow = '0 0 16px #ef4444';
+          rightLed.style.background = '#ef4444';
+          rightLed.style.boxShadow = '0 0 16px #ef4444';
+
+          hubIcon.textContent = '🔒';
+          badge.className = 'badge badge-red';
+          badge.textContent = 'BARRIER LOCKED';
+        }
+
+      } catch (err) {
+        lcdMsg.textContent = 'API GATEWAY OFFLINE (:8080)';
+        lcdMsg.style.color = '#f87171';
+      }
+    }
+
+    async function performCheckOut() {
+      try {
+        await fetch(`${API_BASE}/api/attendance/check-out`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}` },
+          body: JSON.stringify({ memberId: 1, attendanceId: activeAttendanceId })
+        });
+        alert('Check-out logged successfully!');
+        document.getElementById('checkoutBox').style.display = 'none';
+        document.getElementById('turnstileArm').className = 'turnstile-arm closed';
+        document.getElementById('barrierBadge').className = 'badge badge-amber';
+        document.getElementById('barrierBadge').textContent = 'BARRIER LOCKED';
+        document.getElementById('hubIcon').textContent = '🔒';
+        document.getElementById('lcdMessage').textContent = 'THANK YOU FOR VISITING PULSEFIT!';
+      } catch (e) {
+        alert('Check-out completed');
+      }
+    }
+
+    // Tabs
+    function switchTab(tabId) {
+      ['turnstile', 'members', 'subscriptions', 'attendance', 'mesh'].forEach(t => {
+        document.getElementById(`view-${t}`).style.display = (t === tabId) ? (t === 'turnstile' ? 'grid' : 'block') : 'none';
+        const btn = document.getElementById(`tab-${t}`);
+        if (t === tabId) {
+          btn.style.background = 'rgba(16, 185, 129, 0.15)';
+          btn.style.color = '#34d399';
+          btn.style.borderBottom = '2px solid #10b981';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--text-muted)';
+          btn.style.borderBottom = 'none';
+        }
+      });
+
+      if (tabId === 'members') loadMembers();
+      if (tabId === 'subscriptions') loadSubscriptions();
+      if (tabId === 'attendance') loadAttendance();
+    }
+
+    async function loadMembers() {
+      const tbody = document.getElementById('membersTableBody');
+      try {
+        const res = await fetch(`${API_BASE}/api/members`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const list = await res.json();
+        tbody.innerHTML = list.map(m => `
+          <tr>
+            <td><strong style="color: #38bdf8;">#${m.memberId}</strong></td>
+            <td><strong>${m.name}</strong></td>
+            <td>${m.contact}</td>
+            <td>${m.email || 'N/A'}</td>
+            <td><span class="badge ${m.status === 'ACTIVE' ? 'badge-green' : 'badge-red'}">${m.status}</span></td>
+            <td>
+              <button onclick="swipeCard(${m.memberId}, '${m.name}')" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">
+                Swipe Turnstile
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#f87171;">Ensure API Gateway is running on :8080</td></tr>`;
+      }
+    }
+
+    async function loadSubscriptions() {
+      const tbody = document.getElementById('subscriptionsTableBody');
+      try {
+        const res = await fetch(`${API_BASE}/api/subscriptions`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const list = await res.json();
+        tbody.innerHTML = list.map(s => `
+          <tr>
+            <td><strong style="color: #a78bfa;">#${s.subscriptionId}</strong></td>
+            <td>Member #${s.memberId}</td>
+            <td><span class="badge badge-purple">${s.planType}</span></td>
+            <td>${s.startDate}</td>
+            <td style="color: ${s.currentlyValid ? '#34d399' : '#f87171'}; font-weight: 600;">${s.expiryDate}</td>
+            <td><span class="badge ${s.currentlyValid ? 'badge-green' : 'badge-red'}">${s.currentlyValid ? 'ACTIVE' : 'EXPIRED'}</span></td>
+            <td>
+              <button onclick="renewSubscription(${s.subscriptionId})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">
+                Renew (+3 Mo)
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#f87171;">Ensure API Gateway is running on :8080</td></tr>`;
+      }
+    }
+
+    async function renewSubscription(subId) {
+      try {
+        await fetch(`${API_BASE}/api/subscriptions/${subId}/renew`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwtToken}` },
+          body: JSON.stringify({ extensionMonths: 3, updatedPlanType: 'ALL_ACCESS_ANNUAL', renewalPrice: 135.00 })
+        });
+        alert(`Subscription #${subId} renewed successfully! Turnstile entry access restored.`);
+        loadSubscriptions();
+      } catch (e) {
+        alert('Renewal error');
+      }
+    }
+
+    async function loadAttendance() {
+      const tbody = document.getElementById('attendanceTableBody');
+      try {
+        const res = await fetch(`${API_BASE}/api/attendance/recent`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const list = await res.json();
+        tbody.innerHTML = list.map(a => `
+          <tr>
+            <td><strong style="color: #06b6d4;">#${a.attendanceId}</strong></td>
+            <td>Member #${a.memberId}</td>
+            <td>${a.facilityName || a.facilityId}</td>
+            <td class="font-mono">${new Date(a.checkInTime).toLocaleTimeString()}</td>
+            <td class="font-mono">${a.checkOutTime ? new Date(a.checkOutTime).toLocaleTimeString() : '—'}</td>
+            <td><span class="badge ${a.accessStatus === 'GRANTED' ? 'badge-green' : 'badge-red'}">${a.accessStatus}</span></td>
+            <td style="font-size: 0.75rem; color: ${a.accessStatus === 'GRANTED' ? '#64748b' : '#f87171'};">${a.denialReason || 'Verified by Feign'}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#f87171;">Ensure Attendance Service is running</td></tr>`;
+      }
+    }
+  </script>
+</body>
+</html>
