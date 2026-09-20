@@ -2,22 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ──────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   ────────────────────────────────────────────────────────── */
 :root {
-  --bg-main: #090d16;
-  --bg-card: rgba(17, 24, 39, 0.85);
-  --bg-card-hover: rgba(31, 41, 55, 0.95);
-  --border-color: rgba(255, 255, 255, 0.08);
+  /* Surface palette */
+  --bg-main: #08090e;
+  --bg-card: rgba(14, 18, 27, 0.82);
+  --bg-card-hover: rgba(22, 28, 42, 0.92);
+  --bg-elevated: rgba(20, 24, 36, 0.95);
+  --bg-inset: rgba(8, 10, 18, 0.6);
+  --bg-overlay: rgba(0, 0, 0, 0.72);
+
+  /* Border palette */
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-hover: rgba(255, 255, 255, 0.14);
   --border-glow: rgba(16, 185, 129, 0.3);
+
+  /* Accent palette */
   --accent-green: #10b981;
+  --accent-green-light: #34d399;
   --accent-cyan: #06b6d4;
+  --accent-cyan-light: #22d3ee;
   --accent-purple: #8b5cf6;
+  --accent-purple-light: #a78bfa;
   --accent-red: #ef4444;
+  --accent-red-light: #f87171;
   --accent-amber: #f59e0b;
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
+  --accent-amber-light: #fbbf24;
+
+  /* Text palette */
+  --text-main: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Radius scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Transition presets */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadow presets */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.55);
 }
 
+/* ──────────────────────────────────────────────────────────
+   BASE RESET & BODY
+   ────────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -25,37 +67,48 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: var(--bg-main);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 0% 0%, rgba(16, 185, 129, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(6, 182, 212, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 55%);
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
-  line-height: 1.5;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
 }
 
 code, pre, .font-mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
-/* Glassmorphic Container */
+/* ──────────────────────────────────────────────────────────
+   GLASSMORPHIC PANELS
+   ────────────────────────────────────────────────────────── */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .glass-panel:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Animations */
+/* ──────────────────────────────────────────────────────────
+   ANIMATIONS
+   ────────────────────────────────────────────────────────── */
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.8; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.05); }
@@ -71,8 +124,22 @@ code, pre, .font-mono {
   100% { transform: rotate(0deg); }
 }
 
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out both;
 }
 
 /* Turnstile Barrier Arm */
@@ -89,127 +156,187 @@ code, pre, .font-mono {
   transform: rotate(0deg);
 }
 
-/* Buttons */
+/* ──────────────────────────────────────────────────────────
+   BUTTONS
+   ────────────────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 10px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
   border: none;
   outline: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-primary {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
   border: 1px solid var(--border-color);
 }
 
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: var(--border-hover);
 }
 
 .btn-danger {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
-.btn-danger:hover {
+.btn-danger:hover:not(:disabled) {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+  transform: translateY(-1px);
 }
 
 .btn-accent {
   background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
   color: white;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
 }
 
-.btn-accent:hover {
+.btn-accent:hover:not(:disabled) {
   background: linear-gradient(135deg, #0891b2 0%, #0369a1 100%);
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.35);
+  transform: translateY(-1px);
 }
 
-/* Badges */
+/* ──────────────────────────────────────────────────────────
+   BADGES
+   ────────────────────────────────────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .badge-green {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.12);
   color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .badge-red {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .badge-amber {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(245, 158, 11, 0.12);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .badge-cyan {
-  background: rgba(6, 182, 212, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.12);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.25);
 }
 
 .badge-purple {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.12);
   color: #a78bfa;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(139, 92, 246, 0.25);
 }
 
-/* Form Inputs */
+/* ──────────────────────────────────────────────────────────
+   FORM INPUTS
+   ────────────────────────────────────────────────────────── */
 .input-field {
   width: 100%;
   padding: 10px 14px;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(8, 10, 18, 0.65);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   color: var(--text-main);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
   outline: none;
-  transition: all 0.2s;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.input-field::placeholder {
+  color: var(--text-dim);
+}
+
+.input-field:hover {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .input-field:focus {
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+  background: rgba(8, 10, 18, 0.85);
 }
 
-/* Table Styling */
+/* Style native select dropdowns in dark theme */
+.input-field option {
+  background: #0f1118;
+  color: var(--text-main);
+}
+
+/* ──────────────────────────────────────────────────────────
+   TABLES
+   ────────────────────────────────────────────────────────── */
 .custom-table {
   width: 100%;
   border-collapse: separate;
@@ -219,37 +346,78 @@ code, pre, .font-mono {
 .custom-table th {
   padding: 12px 16px;
   text-align: left;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
   border-bottom: 1px solid var(--border-color);
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(8, 10, 18, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.custom-table th:first-child {
+  border-top-left-radius: var(--radius-lg);
+}
+
+.custom-table th:last-child {
+  border-top-right-radius: var(--radius-lg);
 }
 
 .custom-table td {
   padding: 14px 16px;
-  font-size: 0.88rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.86rem;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
 }
 
-.custom-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+.custom-table tbody tr {
+  transition: background var(--transition-fast);
 }
 
-/* Scrollbar */
+.custom-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   SCROLLBAR
+   ────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+/* ──────────────────────────────────────────────────────────
+   ACCESSIBILITY — FOCUS RING UTILITY
+   ────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+/* Remove outlines from mouse clicks but preserve for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
 }

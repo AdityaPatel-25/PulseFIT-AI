@@ -1,0 +1,3 @@
+$kind: collection
+name: PulseFIT AI - API Gateway (:8080)
+description: Complete Postman collection for testing PulseFIT AI Microservices through Spring Cloud API Gateway (Port 8080). Includes automated JWT token extraction.

@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/api/attendance/ai/tailgate-check"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "memberId": 2,
+      "facilityId": "westside_express",
+      "gateId": "GATE_WEST_01"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 1000

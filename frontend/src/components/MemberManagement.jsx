@@ -58,25 +58,26 @@ export default function MemberManagement() {
   return (
     <div>
       {/* Top Action Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Member Directory</h2>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Manage club member records served by Member Service (:8082)</p>
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em' }}>Member Directory</h2>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>Manage club member records served by Member Service (:8082)</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={fetchMembers} className="btn btn-secondary" style={{ padding: '8px 14px' }}>
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
             <span>Refresh</span>
           </button>
           <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
-            <UserPlus size={16} />
+            <UserPlus size={15} />
             <span>Register New Member</span>
           </button>
         </div>
       </div>
 
       {message && (
-        <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', color: '#34d399', fontSize: '0.85rem', marginBottom: '20px' }}>
+        <div style={{ padding: '10px 16px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: 'var(--radius-md)', color: '#34d399', fontSize: '0.84rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle size={15} />
           {message}
         </div>
       )}
@@ -117,23 +118,23 @@ export default function MemberManagement() {
                     </span>
                   </td>
                   <td>
-                    <strong style={{ fontSize: '0.92rem' }}>{m.name}</strong>
+                    <strong style={{ fontSize: '0.88rem' }}>{m.name}</strong>
                   </td>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '0.78rem' }}>
                       <span style={{ color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Phone size={12} color="var(--text-dim)" /> {m.contact}
+                        <Phone size={11} color="var(--text-dim)" /> {m.contact}
                       </span>
                       {m.email && (
                         <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Mail size={12} color="var(--text-dim)" /> {m.email}
+                          <Mail size={11} color="var(--text-dim)" /> {m.email}
                         </span>
                       )}
                     </div>
                   </td>
                   <td>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <MapPin size={12} color="var(--text-dim)" /> {m.address || 'N/A'}
+                      <MapPin size={11} color="var(--text-dim)" /> {m.address || 'N/A'}
                     </span>
                   </td>
                   <td>
@@ -151,14 +152,14 @@ export default function MemberManagement() {
                       <button
                         onClick={() => handleDeactivate(m.memberId)}
                         className="btn btn-secondary"
-                        style={{ padding: '6px 10px', fontSize: '0.75rem', color: '#f87171' }}
+                        style={{ padding: '5px 10px', fontSize: '0.74rem', color: '#f87171' }}
                         title="Deactivate Member"
                       >
-                        <Ban size={14} />
+                        <Ban size={13} />
                         <span>Deactivate</span>
                       </button>
                     ) : (
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Deactivated</span>
+                      <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>Deactivated</span>
                     )}
                   </td>
                 </tr>
@@ -170,82 +171,40 @@ export default function MemberManagement() {
 
       {/* Add Member Modal */}
       {showAddModal && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(8px)' }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', padding: '32px' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '6px' }}>Register New Member Profile</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-overlay)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowAddModal(false); }}
+        >
+          <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '480px', padding: '28px', boxShadow: 'var(--shadow-xl)' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '4px', letterSpacing: '-0.02em' }}>Register New Member Profile</h3>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
               Persisted in Member Service table: member_id, name, contact
             </p>
 
             <form onSubmit={handleCreateMember} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="input-field"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Johnathan Davis"
-                />
-              </div>
+              {[
+                { label: 'Full Name *', key: 'name', type: 'text', required: true, placeholder: 'e.g. Johnathan Davis' },
+                { label: 'Contact Phone *', key: 'contact', type: 'text', required: true, placeholder: 'e.g. +1-555-0188' },
+                { label: 'Email Address', key: 'email', type: 'email', required: false, placeholder: 'e.g. jdavis@fitmail.com' },
+                { label: 'Residential Address', key: 'address', type: 'text', required: false, placeholder: 'e.g. 500 Market St, San Francisco' },
+                { label: 'Emergency Contact', key: 'emergencyContact', type: 'text', required: false, placeholder: 'e.g. +1-555-9922' },
+              ].map(field => (
+                <div key={field.key}>
+                  <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '5px' }}>
+                    {field.label}
+                  </label>
+                  <input
+                    type={field.type}
+                    required={field.required}
+                    className="input-field"
+                    value={formData[field.key]}
+                    onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ))}
 
-              <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Contact Phone *
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="input-field"
-                  value={formData.contact}
-                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                  placeholder="e.g. +1-555-0188"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  className="input-field"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="e.g. jdavis@fitmail.com"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Residential Address
-                </label>
-                <input
-                  type="text"
-                  className="input-field"
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="e.g. 500 Market St, San Francisco"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Emergency Contact
-                </label>
-                <input
-                  type="text"
-                  className="input-field"
-                  value={formData.emergencyContact}
-                  onChange={(e) => setFormData({ ...formData, emergencyContact: e.target.value })}
-                  placeholder="e.g. +1-555-9922"
-                />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>

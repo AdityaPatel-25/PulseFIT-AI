@@ -2,6 +2,10 @@
 workspace:
   id: fd4a0d4e-fefe-41cf-88b9-c41103ed5e23
 
+cloudResources:
+  collections:
+    ../postman/collections/PulseFIT AI - API Gateway (-8080): c133267f-1db8-45cb-b1e4-ad9ca0e18dfa
+
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:
 #localResources:

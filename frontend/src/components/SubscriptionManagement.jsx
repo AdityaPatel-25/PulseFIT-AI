@@ -83,25 +83,26 @@ export default function SubscriptionManagement() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Subscription & Plan Management</h2>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Lifecycle management served by Subscription Service (:8083)</p>
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em' }}>Subscription & Plan Management</h2>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>Lifecycle management served by Subscription Service (:8083)</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={fetchData} className="btn btn-secondary" style={{ padding: '8px 14px' }}>
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
             <span>Refresh</span>
           </button>
           <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
-            <PlusCircle size={16} />
+            <PlusCircle size={15} />
             <span>Assign New Plan</span>
           </button>
         </div>
       </div>
 
       {message && (
-        <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', color: '#34d399', fontSize: '0.85rem', marginBottom: '20px' }}>
+        <div style={{ padding: '10px 16px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: 'var(--radius-md)', color: '#34d399', fontSize: '0.84rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle2 size={15} />
           {message}
         </div>
       )}
@@ -146,11 +147,11 @@ export default function SubscriptionManagement() {
                       </span>
                     </td>
                     <td>
-                      <strong style={{ fontSize: '0.92rem' }}>{getMemberName(sub.memberId)}</strong>
-                      <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--text-dim)' }}>ID: {sub.memberId}</span>
+                      <strong style={{ fontSize: '0.88rem' }}>{getMemberName(sub.memberId)}</strong>
+                      <span style={{ display: 'block', fontSize: '0.7rem', color: 'var(--text-dim)' }}>ID: {sub.memberId}</span>
                     </td>
                     <td>
-                      <span className="badge badge-purple" style={{ fontSize: '0.7rem' }}>
+                      <span className="badge badge-purple" style={{ fontSize: '0.65rem' }}>
                         {sub.planType}
                       </span>
                     </td>
@@ -160,13 +161,13 @@ export default function SubscriptionManagement() {
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Calendar size={13} /> {sub.startDate}
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Calendar size={12} /> {sub.startDate}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: isExpired ? '#f87171' : '#34d399', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Clock size={13} /> {sub.expiryDate}
+                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isExpired ? '#f87171' : '#34d399', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Clock size={12} /> {sub.expiryDate}
                       </span>
                     </td>
                     <td>
@@ -186,9 +187,9 @@ export default function SubscriptionManagement() {
                           setUpdatedPlanType(sub.planType);
                         }}
                         className="btn btn-secondary"
-                        style={{ padding: '6px 12px', fontSize: '0.78rem', borderColor: isExpired ? '#f59e0b' : undefined }}
+                        style={{ padding: '5px 10px', fontSize: '0.76rem', borderColor: isExpired ? 'rgba(245, 158, 11, 0.4)' : undefined }}
                       >
-                        <Sparkles size={14} color={isExpired ? '#f59e0b' : '#34d399'} />
+                        <Sparkles size={13} color={isExpired ? '#fbbf24' : '#34d399'} />
                         <span>Renew Plan</span>
                       </button>
                     </td>
@@ -202,18 +203,21 @@ export default function SubscriptionManagement() {
 
       {/* Renew Modal */}
       {renewModalSub && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(8px)' }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '460px', padding: '32px' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '6px' }}>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-overlay)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setRenewModalSub(null); }}
+        >
+          <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '440px', padding: '28px', boxShadow: 'var(--shadow-xl)' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '4px', letterSpacing: '-0.02em' }}>
               Renew Subscription #{renewModalSub.subscriptionId}
             </h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
               Extending pass for: <strong>{getMemberName(renewModalSub.memberId)}</strong>
             </p>
 
             <form onSubmit={handleRenewSubscription} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
                   Extension Period
                 </label>
                 <select
@@ -229,7 +233,7 @@ export default function SubscriptionManagement() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
                   Plan Upgrade / Type
                 </label>
                 <select
@@ -243,7 +247,7 @@ export default function SubscriptionManagement() {
                 </select>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button type="button" onClick={() => setRenewModalSub(null)} className="btn btn-secondary">
                   Cancel
                 </button>
@@ -258,16 +262,19 @@ export default function SubscriptionManagement() {
 
       {/* Assign New Subscription Modal */}
       {showAddModal && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(8px)' }}>
-          <div className="glass-panel" style={{ width: '100%', maxWidth: '480px', padding: '32px' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '6px' }}>Assign Membership Plan</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-overlay)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowAddModal(false); }}
+        >
+          <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '460px', padding: '28px', boxShadow: 'var(--shadow-xl)' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '4px', letterSpacing: '-0.02em' }}>Assign Membership Plan</h3>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
               Creates subscription and calculates validity window
             </p>
 
             <form onSubmit={handleCreateSubscription} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '5px' }}>
                   Select Member *
                 </label>
                 <select
@@ -284,7 +291,7 @@ export default function SubscriptionManagement() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '5px' }}>
                   Plan Tier
                 </label>
                 <select
@@ -305,7 +312,7 @@ export default function SubscriptionManagement() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '5px' }}>
                   Facility Access Tier
                 </label>
                 <select
@@ -319,7 +326,7 @@ export default function SubscriptionManagement() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '5px' }}>
                   Plan Price ($)
                 </label>
                 <input
@@ -331,7 +338,7 @@ export default function SubscriptionManagement() {
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
                   Cancel
                 </button>

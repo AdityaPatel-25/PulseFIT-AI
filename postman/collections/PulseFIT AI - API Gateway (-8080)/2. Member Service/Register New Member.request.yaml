@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/api/members"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "David Miller",
+      "contact": "+1-555-8899",
+      "email": "dmiller@pulsefit.com",
+      "address": "450 Lexington Ave, New York, NY"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 3000

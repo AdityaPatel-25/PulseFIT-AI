@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/api/subscriptions/3/renew"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "extensionMonths": 3,
+      "updatedPlanType": "PREMIUM_QUARTERLY",
+      "renewalPrice": 135.00
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 3000

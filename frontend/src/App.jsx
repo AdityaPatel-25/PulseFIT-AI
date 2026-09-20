@@ -102,7 +102,7 @@ export default function App() {
       />
 
       {/* Main Content Area - Role-Based Windows */}
-      <main style={{ flex: 1, maxWidth: '1440px', width: '100%', margin: '0 auto', padding: '28px 24px' }}>
+      <main style={{ flex: 1, maxWidth: '1440px', width: '100%', margin: '0 auto', padding: '24px 20px' }}>
         
         {/* ROLE 1: MEMBER WINDOW */}
         {user?.role === 'ROLE_MEMBER' && (
@@ -129,15 +129,14 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid var(--border-color)', padding: '20px 24px', textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-dim)', background: 'rgba(9, 13, 22, 0.95)' }}>
+      <footer style={{ borderTop: '1px solid var(--border-color)', padding: '16px 24px', fontSize: '0.74rem', color: 'var(--text-dim)', background: 'rgba(8, 9, 14, 0.92)' }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>PulseFIT Health Clubs © 2026 — Enterprise SOA Platform</span>
-          <span style={{ display: 'flex', gap: '16px' }}>
-            <span>Java 17</span>
-            <span>Spring Boot 3.2.5</span>
-            <span>Spring Cloud 2023</span>
-            <span>Netflix Eureka</span>
-          </span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {['Java 17', 'Spring Boot 3.2.5', 'Spring Cloud 2023', 'Netflix Eureka'].map(t => (
+              <span key={t} style={{ padding: '2px 8px', borderRadius: '6px', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)', fontSize: '0.68rem' }}>{t}</span>
+            ))}
+          </div>
         </div>
       </footer>
 

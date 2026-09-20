@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/api/attendance/check-in"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "memberId": 3,
+      "facilityId": "FACILITY_WESTSIDE",
+      "facilityName": "PulseFit Westside Express"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 2000

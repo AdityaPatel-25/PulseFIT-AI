@@ -122,90 +122,90 @@ export default function MemberPortal({ user }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Member Window Banner */}
-      <div className="glass-panel" style={{ padding: '24px 32px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%)', border: '1px solid rgba(16, 185, 129, 0.25)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="glass-panel" style={{ padding: '22px 28px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.06) 100%)', border: '1px solid rgba(16, 185, 129, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <span className="badge badge-green" style={{ fontSize: '0.72rem' }}>🏃 Member Self-Service Window</span>
-            <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>JWT Authenticated (:8081)</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span className="badge badge-green" style={{ fontSize: '0.65rem' }}>🏃 Member Self-Service Window</span>
+            <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>JWT Authenticated (:8081)</span>
           </div>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Welcome back, Alex Mercer!</h2>
-          <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-            Digital Pass ID: <span className="font-mono" style={{ color: '#34d399', fontWeight: 700 }}>#001-VIP</span> • Facility Tier: <strong style={{ color: '#f3f4f6' }}>All-Access Elite Multi-Club</strong>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em' }}>Welcome back, Alex Mercer!</h2>
+          <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)' }}>
+            Digital Pass ID: <span className="font-mono" style={{ color: '#34d399', fontWeight: 700 }}>#001-VIP</span> • Facility Tier: <strong style={{ color: 'var(--text-main)' }}>All-Access Elite Multi-Club</strong>
           </p>
         </div>
         <button onClick={loadMemberData} className="btn btn-secondary" style={{ padding: '8px 14px' }}>
-          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+          <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           <span>Sync Status</span>
         </button>
       </div>
 
       {renewMessage && (
-        <div style={{ padding: '12px 18px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', color: '#34d399', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle2 size={18} />
+        <div style={{ padding: '10px 16px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: 'var(--radius-md)', color: '#34d399', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle2 size={16} />
           <span>{renewMessage}</span>
         </div>
       )}
 
       {/* Grid: Left Column Digital Pass & Tap | Right Column Subscription & History */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '24px' }}>
         
         {/* LEFT: Digital RFID Pass + Turnstile Tap */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           {/* Holographic RFID Card */}
           <div style={{ 
             background: 'linear-gradient(135deg, #064e3b 0%, #0f172a 50%, #1e1b4b 100%)', 
-            borderRadius: '24px', 
-            padding: '28px', 
-            border: '1px solid rgba(16, 185, 129, 0.4)', 
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+            borderRadius: 'var(--radius-xl)', 
+            padding: '26px', 
+            border: '1px solid rgba(16, 185, 129, 0.35)', 
+            boxShadow: '0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
             position: 'relative',
             overflow: 'hidden'
           }}>
             {/* Card Background Watermark */}
-            <div style={{ position: 'absolute', right: '-20px', bottom: '-20px', opacity: 0.08, pointerEvents: 'none' }}>
-              <Activity size={240} />
+            <div style={{ position: 'absolute', right: '-20px', bottom: '-20px', opacity: 0.06, pointerEvents: 'none' }}>
+              <Activity size={220} />
             </div>
 
             {/* Top row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
               <div>
-                <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#6ee7b7', fontWeight: 800 }}>
+                <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#6ee7b7', fontWeight: 800 }}>
                   PulseFIT Health Clubs
                 </span>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em' }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em' }}>
                   ALL-ACCESS VIP PASS
                 </h3>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(0,0,0,0.4)', padding: '6px 12px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.15)' }}>
-                <Zap size={14} color="#10b981" />
-                <span className="font-mono" style={{ fontSize: '0.72rem', color: '#34d399', fontWeight: 700 }}>NFC ACTIVE</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(0,0,0,0.4)', padding: '5px 10px', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                <Zap size={13} color="#10b981" />
+                <span className="font-mono" style={{ fontSize: '0.68rem', color: '#34d399', fontWeight: 700 }}>NFC ACTIVE</span>
               </div>
             </div>
 
             {/* Chip & Contactless Icon */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
-              <div style={{ width: '46px', height: '34px', borderRadius: '6px', background: 'linear-gradient(135deg, #d97706 0%, #fbbf24 100%)', border: '1px solid #b45309', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)' }} />
-              <ScanLine size={24} color="#34d399" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ width: '42px', height: '30px', borderRadius: '5px', background: 'linear-gradient(135deg, #d97706 0%, #fbbf24 100%)', border: '1px solid #b45309', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.35)' }} />
+              <ScanLine size={22} color="#34d399" />
             </div>
 
             {/* Member Info */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div>
-                <span style={{ display: 'block', fontSize: '0.68rem', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.08em' }}>MEMBER NAME</span>
-                <strong style={{ fontSize: '1.15rem', color: '#f8fafc', letterSpacing: '0.02em' }}>
+                <span style={{ display: 'block', fontSize: '0.65rem', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.08em' }}>MEMBER NAME</span>
+                <strong style={{ fontSize: '1.1rem', color: '#f8fafc', letterSpacing: '0.02em' }}>
                   {member?.name || 'Alex Mercer'}
                 </strong>
-                <span style={{ display: 'block', fontSize: '0.75rem', color: '#cbd5e1', marginTop: '2px' }}>
+                <span style={{ display: 'block', fontSize: '0.73rem', color: '#cbd5e1', marginTop: '2px' }}>
                   Member ID: #0000{memberId} • Status: <span style={{ color: '#34d399', fontWeight: 700 }}>ACTIVE</span>
                 </span>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span style={{ display: 'block', fontSize: '0.68rem', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.08em' }}>EXPIRES</span>
-                <span className="font-mono" style={{ fontSize: '0.9rem', color: '#f1f5f9', fontWeight: 700 }}>
+                <span style={{ display: 'block', fontSize: '0.65rem', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.08em' }}>EXPIRES</span>
+                <span className="font-mono" style={{ fontSize: '0.88rem', color: '#f1f5f9', fontWeight: 700 }}>
                   {subscription?.expiryDate || '2026-12-31'}
                 </span>
               </div>
@@ -213,36 +213,37 @@ export default function MemberPortal({ user }) {
           </div>
 
           {/* Turnstile Tap Console */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div className="glass-panel" style={{ padding: '22px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ScanLine size={20} color="#10b981" />
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Tap Pass at Turnstile Gate</h3>
+                <ScanLine size={18} color="#10b981" />
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>Tap Pass at Turnstile Gate</h3>
               </div>
-              <span className="badge badge-green" style={{ fontSize: '0.65rem' }}>SIMULATED NFC TAP</span>
+              <span className="badge badge-green" style={{ fontSize: '0.6rem' }}>SIMULATED NFC TAP</span>
             </div>
 
             {/* Select Target Facility */}
-            <div style={{ marginBottom: '18px' }}>
-              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '8px' }}>
                 Select Entry Gate / Facility:
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
                 {facilities.map(f => (
                   <button
                     key={f.id}
                     type="button"
                     onClick={() => setSelectedFacility(f)}
                     style={{
-                      padding: '10px 8px',
+                      padding: '9px 8px',
                       borderRadius: '10px',
-                      background: selectedFacility.id === f.id ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.03)',
-                      border: selectedFacility.id === f.id ? '1px solid #10b981' : '1px solid var(--border-color)',
+                      background: selectedFacility.id === f.id ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.03)',
+                      border: selectedFacility.id === f.id ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid var(--border-color)',
                       color: selectedFacility.id === f.id ? '#34d399' : 'var(--text-muted)',
-                      fontSize: '0.78rem',
+                      fontSize: '0.76rem',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      textAlign: 'center'
+                      textAlign: 'center',
+                      transition: 'all 0.15s ease'
                     }}
                   >
                     {f.name.replace('PulseFit ', '')}
@@ -256,39 +257,39 @@ export default function MemberPortal({ user }) {
               onClick={handleTapGate}
               disabled={tapping}
               className="btn btn-primary"
-              style={{ width: '100%', padding: '16px', fontSize: '1.05rem', fontWeight: 800, borderRadius: '14px', boxShadow: '0 8px 24px rgba(16, 185, 129, 0.4)' }}
+              style={{ width: '100%', padding: '14px', fontSize: '1rem', fontWeight: 800, borderRadius: 'var(--radius-md)', boxShadow: '0 6px 20px rgba(16, 185, 129, 0.35)' }}
             >
-              <ScanLine size={22} className={tapping ? 'animate-spin' : ''} />
+              <ScanLine size={20} className={tapping ? 'animate-spin' : ''} />
               <span>{tapping ? 'Communicating with Turnstile (:8084)...' : `Tap Phone at ${selectedFacility.name}`}</span>
             </button>
 
             {/* Result Box */}
             {tapResult && (
               <div style={{
-                marginTop: '18px',
-                padding: '16px 20px',
-                borderRadius: '12px',
-                background: tapResult.granted ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                border: `1px solid ${tapResult.granted ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
+                marginTop: '16px',
+                padding: '14px 18px',
+                borderRadius: 'var(--radius-md)',
+                background: tapResult.granted ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                border: `1px solid ${tapResult.granted ? 'rgba(16, 185, 129, 0.35)' : 'rgba(239, 68, 68, 0.35)'}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {tapResult.granted ? <CheckCircle2 size={28} color="#10b981" /> : <XCircle size={28} color="#ef4444" />}
+                  {tapResult.granted ? <CheckCircle2 size={26} color="#10b981" /> : <XCircle size={26} color="#ef4444" />}
                   <div>
-                    <strong style={{ display: 'block', color: tapResult.granted ? '#34d399' : '#f87171', fontSize: '0.95rem' }}>
+                    <strong style={{ display: 'block', color: tapResult.granted ? '#34d399' : '#f87171', fontSize: '0.92rem' }}>
                       {tapResult.granted ? 'ACCESS GRANTED • BARRIER OPENED' : 'ACCESS DENIED'}
                     </strong>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                       {tapResult.message}
                     </span>
                   </div>
                 </div>
 
                 {activeCheckInId && (
-                  <button onClick={handleCheckOut} className="btn btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>
-                    <LogOut size={16} />
+                  <button onClick={handleCheckOut} className="btn btn-secondary" style={{ padding: '7px 12px', fontSize: '0.78rem' }}>
+                    <LogOut size={15} />
                     <span>Check Out</span>
                   </button>
                 )}
@@ -299,89 +300,75 @@ export default function MemberPortal({ user }) {
         </div>
 
         {/* RIGHT: Subscription Details + Personal Attendance History */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           {/* Subscription Info Card */}
-          <div className="glass-panel" style={{ padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div className="glass-panel" style={{ padding: '22px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <CreditCard size={20} color="#a78bfa" />
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>Active Subscription Plan</h3>
+                <CreditCard size={18} color="#a78bfa" />
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>Active Subscription Plan</h3>
               </div>
-              <span className={`badge ${subscription?.currentlyValid ? 'badge-green' : 'badge-red'}`} style={{ fontSize: '0.68rem' }}>
+              <span className={`badge ${subscription?.currentlyValid ? 'badge-green' : 'badge-red'}`} style={{ fontSize: '0.62rem' }}>
                 {subscription?.currentlyValid ? 'ACTIVE & VALID' : 'EXPIRED'}
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
-              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Plan Type</span>
-                <p style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--accent-purple)', marginTop: '2px' }}>
-                  {subscription?.planType || 'ALL_ACCESS_ANNUAL'}
-                </p>
-              </div>
-
-              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Facility Tier</span>
-                <p style={{ fontSize: '0.92rem', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>
-                  {subscription?.facilityTier || 'MULTI_FACILITY'}
-                </p>
-              </div>
-
-              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Valid From</span>
-                <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', marginTop: '2px' }}>
-                  {subscription?.startDate || '2026-01-01'}
-                </p>
-              </div>
-
-              <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Valid Until</span>
-                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#34d399', marginTop: '2px' }}>
-                  {subscription?.expiryDate || '2026-12-31'}
-                </p>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '18px' }}>
+              {[
+                { label: 'Plan Type', value: subscription?.planType || 'ALL_ACCESS_ANNUAL', color: 'var(--accent-purple)' },
+                { label: 'Facility Tier', value: subscription?.facilityTier || 'MULTI_FACILITY', color: '#22d3ee' },
+                { label: 'Valid From', value: subscription?.startDate || '2026-01-01', color: 'var(--text-main)' },
+                { label: 'Valid Until', value: subscription?.expiryDate || '2026-12-31', color: '#34d399' },
+              ].map(item => (
+                <div key={item.label} style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>{item.label}</span>
+                  <p style={{ fontSize: '0.88rem', fontWeight: 700, color: item.color, marginTop: '2px' }}>
+                    {item.value}
+                  </p>
+                </div>
+              ))}
             </div>
 
             <button
               onClick={handleQuickRenew}
               disabled={renewing}
               className="btn btn-secondary"
-              style={{ width: '100%', padding: '10px', fontSize: '0.85rem', borderColor: 'rgba(16, 185, 129, 0.4)' }}
+              style={{ width: '100%', padding: '9px', fontSize: '0.84rem', borderColor: 'rgba(16, 185, 129, 0.35)' }}
             >
-              <Sparkles size={16} color="#10b981" />
+              <Sparkles size={15} color="#10b981" />
               <span>{renewing ? 'Processing Renewal...' : 'Renew Subscription (+3 Months Extension)'}</span>
             </button>
           </div>
 
           {/* Personal Visit History */}
-          <div className="glass-panel" style={{ padding: '24px', flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <div className="glass-panel" style={{ padding: '22px', flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Clock size={18} color="#06b6d4" />
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800 }}>My Recent Gym Visits</h3>
+                <Clock size={17} color="#06b6d4" />
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>My Recent Gym Visits</h3>
               </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Alex Mercer (ID #1)</span>
+              <span style={{ fontSize: '0.73rem', color: 'var(--text-dim)' }}>Alex Mercer (ID #1)</span>
             </div>
 
             {history.length === 0 ? (
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center', padding: '24px 0' }}>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center', padding: '20px 0' }}>
                 No recent visits recorded yet. Tap the pass above to log your first workout!
               </p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '250px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '250px', overflowY: 'auto' }}>
                 {history.map(item => (
-                  <div key={item.attendanceId} style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div key={item.attendanceId} style={{ padding: '10px 12px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <MapPin size={13} color="var(--accent-cyan)" />
-                        <strong style={{ fontSize: '0.85rem' }}>{item.facilityName || item.facilityId}</strong>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <MapPin size={12} color="var(--accent-cyan)" />
+                        <strong style={{ fontSize: '0.84rem' }}>{item.facilityName || item.facilityId}</strong>
                       </div>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '2px', display: 'block' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '2px', display: 'block' }}>
                         {new Date(item.checkInTime).toLocaleString()}
                       </span>
                     </div>
-                    <span className={`badge ${item.accessStatus === 'GRANTED' ? 'badge-green' : 'badge-red'}`} style={{ fontSize: '0.65rem' }}>
+                    <span className={`badge ${item.accessStatus === 'GRANTED' ? 'badge-green' : 'badge-red'}`} style={{ fontSize: '0.6rem' }}>
                       {item.accessStatus}
                     </span>
                   </div>

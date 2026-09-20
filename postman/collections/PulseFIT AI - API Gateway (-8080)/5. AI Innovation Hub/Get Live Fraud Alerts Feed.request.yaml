@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{base_url}}/api/attendance/ai/fraud-alerts"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+order: 2000

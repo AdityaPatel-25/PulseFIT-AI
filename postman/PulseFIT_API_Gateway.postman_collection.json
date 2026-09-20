@@ -1,0 +1,478 @@
+{
+	"info": {
+		"_postman_id": "pulsefit-api-gateway-v1",
+		"name": "PulseFIT AI - API Gateway (:8080)",
+		"description": "Complete Postman collection for testing PulseFIT AI Microservices through Spring Cloud API Gateway (Port 8080). Includes automated JWT token extraction.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication (Auth Service)",
+			"item": [
+				{
+					"name": "Login as Admin (Extracts JWT)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Saved JWT token for user: \" + jsonData.username);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as Staff (staff_john)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"staff_john\",\n  \"password\": \"staff123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as Member (member_alex)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"member_alex\",\n  \"password\": \"member123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Validate JWT Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/auth/validate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "validate"]
+						}
+					}
+				},
+				{
+					"name": "Get All Auth Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/auth/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "users"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Member Service",
+			"item": [
+				{
+					"name": "Get All Members",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/members",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members"]
+						}
+					}
+				},
+				{
+					"name": "Get Member by ID (#1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/members/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "1"]
+						}
+					}
+				},
+				{
+					"name": "Register New Member",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"David Miller\",\n  \"contact\": \"+1-555-8899\",\n  \"email\": \"dmiller@pulsefit.com\",\n  \"address\": \"450 Lexington Ave, New York, NY\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/members",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Subscription Service",
+			"item": [
+				{
+					"name": "Get All Subscriptions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/subscriptions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "subscriptions"]
+						}
+					}
+				},
+				{
+					"name": "Get Active Subscription for Member #1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/subscriptions/member/1/active",
+							"host": ["{{base_url}}"],
+							"path": ["api", "subscriptions", "member", "1", "active"]
+						}
+					}
+				},
+				{
+					"name": "Renew Member #3 Subscription (+3 Months)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"extensionMonths\": 3,\n  \"updatedPlanType\": \"PREMIUM_QUARTERLY\",\n  \"renewalPrice\": 135.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/subscriptions/3/renew",
+							"host": ["{{base_url}}"],
+							"path": ["api", "subscriptions", "3", "renew"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Attendance & Turnstile IoT",
+			"item": [
+				{
+					"name": "Turnstile Check-In (Member #1 - Access Granted)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberId\": 1,\n  \"facilityId\": \"FACILITY_DOWNTOWN\",\n  \"facilityName\": \"PulseFit Downtown Elite\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/attendance/check-in",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "check-in"]
+						}
+					}
+				},
+				{
+					"name": "Turnstile Check-In (Member #3 - Access Denied Expired)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberId\": 3,\n  \"facilityId\": \"FACILITY_WESTSIDE\",\n  \"facilityName\": \"PulseFit Westside Express\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/attendance/check-in",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "check-in"]
+						}
+					}
+				},
+				{
+					"name": "Get Recent Turnstile Logs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/attendance/recent",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "recent"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. AI Innovation Hub",
+			"item": [
+				{
+					"name": "Anti-Fraud Tailgate Velocity Check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberId\": 2,\n  \"facilityId\": \"westside_express\",\n  \"gateId\": \"GATE_WEST_01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/attendance/ai/tailgate-check",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "ai", "tailgate-check"]
+						}
+					}
+				},
+				{
+					"name": "Get Live Fraud Alerts Feed",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/attendance/ai/fraud-alerts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "ai", "fraud-alerts"]
+						}
+					}
+				},
+				{
+					"name": "Get Facility Occupancy Heatmap",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/attendance/ai/occupancy-heatmap",
+							"host": ["{{base_url}}"],
+							"path": ["api", "attendance", "ai", "occupancy-heatmap"]
+						}
+					}
+				},
+				{
+					"name": "Get Member Habit & Churn Risk (Member #1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/members/ai/retention/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "ai", "retention", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
