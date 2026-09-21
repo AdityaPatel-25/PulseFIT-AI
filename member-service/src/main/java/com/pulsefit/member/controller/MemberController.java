@@ -3,6 +3,9 @@ package com.pulsefit.member.controller;
 import com.pulsefit.member.dto.MemberRequest;
 import com.pulsefit.member.dto.MemberResponse;
 import com.pulsefit.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members")
+@Tag(name = "Member Profile Management", description = "Endpoints for creating, retrieving, updating, and deactivating member records")
 public class MemberController {
 
     private final MemberService memberService;
@@ -22,6 +26,7 @@ public class MemberController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new member", description = "Registers a new member profile", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<?> createMember(@Valid @RequestBody MemberRequest request) {
         try {
             MemberResponse response = memberService.createMember(request);
@@ -32,6 +37,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
+    @Operation(summary = "Get member by ID", description = "Retrieves profile and status for a specific member", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<?> getMemberById(@PathVariable("memberId") Long memberId) {
         try {
             MemberResponse response = memberService.getMemberById(memberId);
@@ -42,11 +48,13 @@ public class MemberController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all members", description = "Retrieves all registered gym members in the platform", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<List<MemberResponse>> getAllMembers() {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
     @PutMapping("/{memberId}")
+    @Operation(summary = "Update member profile", description = "Updates details for an existing member", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<?> updateMember(@PathVariable("memberId") Long memberId, @Valid @RequestBody MemberRequest request) {
         try {
             MemberResponse response = memberService.updateMember(memberId, request);
@@ -57,6 +65,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{memberId}")
+    @Operation(summary = "Deactivate member", description = "Sets member status to INACTIVE", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<?> deactivateMember(@PathVariable("memberId") Long memberId) {
         try {
             memberService.deactivateMember(memberId);
@@ -67,6 +76,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/status")
+    @Operation(summary = "Check member active status", description = "Quick status check for turnstile gate verification", security = @SecurityRequirement(name = "BearerAuth"))
     public ResponseEntity<Map<String, Object>> checkStatus(@PathVariable("memberId") Long memberId) {
         boolean active = memberService.isMemberActive(memberId);
         return ResponseEntity.ok(Map.of(

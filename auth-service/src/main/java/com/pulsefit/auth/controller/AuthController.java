@@ -13,12 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import com.pulsefit.auth.dto.ResetPasswordRequest;
 import com.pulsefit.auth.dto.SocialLoginRequest;
 import com.pulsefit.auth.dto.UserDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication & Security", description = "User registration, authentication, JWT token generation, and validation")
 public class AuthController {
 
     private final AuthService authService;
@@ -28,6 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register new user account", description = "Creates a new user account with specified role (MEMBER, STAFF, ADMIN) and returns an initial JWT token")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
             AuthResponse response = authService.register(request);
@@ -38,6 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Authenticate user & obtain JWT token", description = "Validates credentials (username/password) and returns signed HMAC-SHA256 Bearer JWT token")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
             AuthResponse response = authService.login(request);
@@ -48,6 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/social-login")
+    @Operation(summary = "Social OAuth login simulation", description = "Simulates OAuth login via Google/Apple and issues JWT token")
     public ResponseEntity<?> socialLogin(@Valid @RequestBody SocialLoginRequest request) {
         try {
             AuthResponse response = authService.socialLogin(request);
@@ -58,6 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
+    @Operation(summary = "Reset user password", description = "Resets user password given a valid username and recovery email")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         try {
             Map<String, Object> response = authService.resetPassword(request);
@@ -68,12 +77,19 @@ public class AuthController {
     }
 
     @GetMapping("/users")
+    @Operation(summary = "List all registered accounts", description = "Returns user profiles and roles (admin view)")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(authService.getAllUsers());
     }
 
     @GetMapping("/validate")
+    @Operation(
+        summary = "Validate JWT Bearer Token",
+        description = "Verifies signature and claims of the Bearer JWT token passed in Authorization header. Requires clicking 'Authorize' in Swagger with your JWT token.",
+        security = @SecurityRequirement(name = "BearerAuth")
+    )
     public ResponseEntity<TokenValidationResponse> validateToken(
+            @Parameter(description = "Bearer JWT token string (auto-injected when using Swagger Authorize button)")
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

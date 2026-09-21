@@ -80,6 +80,27 @@ Each service includes an embedded H2 database console:
 - Attendance Service DB: `http://localhost:8084/h2-console` (JDBC URL: `jdbc:h2:mem:attendancedb`)
 *(Username: `sa`, Password: leave blank)*
 
+### C. Swagger UI & JWT Bearer Authentication (Interactive OpenAPI 3)
+Each microservice is equipped with Springdoc OpenAPI 3 with interactive Bearer JWT support:
+- **Auth Service Swagger**: [http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)
+- **Member Service Swagger**: [http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
+- **Subscription Service Swagger**: [http://localhost:8083/swagger-ui/index.html](http://localhost:8083/swagger-ui/index.html)
+- **Attendance Service Swagger**: [http://localhost:8084/swagger-ui/index.html](http://localhost:8084/swagger-ui/index.html)
+
+#### How to Authenticate with JWT in Swagger UI:
+1. Open the **Auth Service Swagger UI**: `http://localhost:8081/swagger-ui/index.html`
+2. Expand `POST /api/auth/login` ➡️ click **Try it out** ➡️ enter:
+   ```json
+   {
+     "username": "admin",
+     "password": "admin123"
+   }
+   ```
+   Click **Execute** and copy the `"token"` value from the response.
+3. Click the green **Authorize 🔓** button at the top right of the Swagger UI.
+4. Paste the JWT token into the `Value` box and click **Authorize**, then **Close**.
+5. The lock turns to closed 🔒. All secured endpoints (e.g. `GET /api/auth/validate`, `GET /api/members`) will now automatically send `Authorization: Bearer <token>`.
+
 ---
 
 ## 5. End-to-End Testing via Postman or cURL
