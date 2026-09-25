@@ -81,11 +81,13 @@ Each service includes an embedded H2 database console:
 *(Username: `sa`, Password: leave blank)*
 
 ### C. Swagger UI & JWT Bearer Authentication (Interactive OpenAPI 3)
-Each microservice is equipped with Springdoc OpenAPI 3 with interactive Bearer JWT support:
+- **⚡ Unified API Gateway Swagger Hub (All Microservices in One)**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+  *(Select any service from the top-right definition dropdown: Auth, Member, Subscription, or Attendance. All requests route directly through API Gateway Port 8080 with live JWT security!)*
 - **Auth Service Swagger**: [http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)
 - **Member Service Swagger**: [http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
 - **Subscription Service Swagger**: [http://localhost:8083/swagger-ui/index.html](http://localhost:8083/swagger-ui/index.html)
 - **Attendance Service Swagger**: [http://localhost:8084/swagger-ui/index.html](http://localhost:8084/swagger-ui/index.html)
+- **In-App Web Dashboard Swagger Portal**: [http://localhost:3000](http://localhost:3000) (Navigate to "Swagger UI" tab)
 
 #### How to Authenticate with JWT in Swagger UI:
 1. Open the **Auth Service Swagger UI**: `http://localhost:8081/swagger-ui/index.html`

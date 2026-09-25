@@ -11,6 +11,7 @@ import MemberPortal from './components/MemberPortal';
 import Demo from './components/ui/demo';
 import ValidationPage from './components/ui/ValidationPage';
 import AiInnovationHub from './components/AiInnovationHub';
+import SwaggerPortal from './components/SwaggerPortal';
 import { authApi } from './api/client';
 
 export default function App() {
@@ -99,6 +100,7 @@ export default function App() {
         onSwitchRole={handleSwitchRole}
         onOpenSignInPage={handleLogout}
         onOpenValidation={() => setShowValidation(true)}
+        onOpenSwagger={() => { setShowValidation(false); setActiveTab('swagger'); }}
       />
 
       {/* Main Content Area - Role-Based Windows */}
@@ -122,6 +124,7 @@ export default function App() {
             {activeTab === 'subscriptions' && <SubscriptionManagement />}
             {activeTab === 'attendance' && <AttendanceAnalytics />}
             {activeTab === 'ai-hub' && <AiInnovationHub />}
+            {activeTab === 'swagger' && <SwaggerPortal user={user} />}
             {activeTab === 'services' && <ServiceHealth />}
           </>
         )}

@@ -141,6 +141,16 @@ export function LoginPage({ onBack, onLoginSuccess }: LoginPageProps = {}) {
     return <ValidationPage onBack={() => setShowValidationPage(false)} />
   }
 
+  const handleQuickRole = (username: string, pass: string, email: string) => {
+    setFormData({
+      email: email,
+      password: pass,
+      rememberMe: true
+    })
+    setErrorMessage('')
+    setSuccessMessage(`Loaded ${username} credentials! Click 'Sign In with JWT' to log in.`)
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({
@@ -228,17 +238,6 @@ export function LoginPage({ onBack, onLoginSuccess }: LoginPageProps = {}) {
     }
   }
 
-  // Quick select helper for demonstration
-  const handleQuickRole = (roleUser: string, rolePass: string, roleEmail: string) => {
-    setFormData({
-      email: roleEmail,
-      password: rolePass,
-      rememberMe: true
-    })
-    setErrorMessage('')
-    setSuccessMessage('')
-    setAuthMode('signin')
-  }
 
   return (
     <div className="h-screen w-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex overflow-hidden">
@@ -381,14 +380,14 @@ export function LoginPage({ onBack, onLoginSuccess }: LoginPageProps = {}) {
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickRole('staff_john', 'staff123', 'staff_john@pulsefit.com')}
+                onClick={() => handleQuickRole('staff_john', 'staff123', 'staff@pulsefit.com')}
                 className="px-2 py-1.5 text-xs font-black rounded-lg border-2 border-cyan-500 bg-cyan-100 text-black hover:bg-cyan-200 transition-all text-center shadow-sm"
               >
                 🧑‍💼 Staff
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickRole('member_alex', 'member123', 'alex.mercer@pulsefit.com')}
+                onClick={() => handleQuickRole('member_alex', 'alex123', 'alex@pulsefit.com')}
                 className="px-2 py-1.5 text-xs font-black rounded-lg border-2 border-emerald-500 bg-emerald-100 text-black hover:bg-emerald-200 transition-all text-center shadow-sm"
               >
                 🏃 Member

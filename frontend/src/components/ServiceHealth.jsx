@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Cpu, Server, CheckCircle2, XCircle, ArrowRight, Shield, Layers, RefreshCw, Zap } from 'lucide-react';
+import { Cpu, Server, CheckCircle2, XCircle, ArrowRight, Shield, Layers, RefreshCw, Zap, FileCode2, ExternalLink } from 'lucide-react';
 
 export default function ServiceHealth() {
   const [statuses, setStatuses] = useState({
@@ -113,9 +113,23 @@ export default function ServiceHealth() {
               </p>
             </div>
 
-            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-dim)' }}>
+            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem', color: 'var(--text-dim)' }}>
               <span>Eureka Client: Active</span>
-              <span>Health: 200 OK</span>
+              {['auth', 'member', 'subscription', 'attendance'].includes(key) ? (
+                <a
+                  href={`http://localhost:${svc.port}/swagger-ui/index.html`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#10b981', textDecoration: 'none', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.1)' }}
+                  title={`Open Swagger UI for ${svc.name}`}
+                >
+                  <FileCode2 size={11} />
+                  <span>Swagger UI</span>
+                  <ExternalLink size={10} />
+                </a>
+              ) : (
+                <span>Health: 200 OK</span>
+              )}
             </div>
           </div>
         ))}

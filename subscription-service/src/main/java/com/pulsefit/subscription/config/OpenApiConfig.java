@@ -7,8 +7,11 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
@@ -18,6 +21,10 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI subscriptionServiceOpenAPI() {
         return new OpenAPI()
+                .servers(List.of(
+                        new Server().url("http://localhost:8080").description("API Gateway Ingress (Port 8080)"),
+                        new Server().url("http://localhost:8083").description("Direct Subscription Service (Port 8083)")
+                ))
                 .info(new Info()
                         .title("PulseFIT AI - Subscription Service API")
                         .description("Membership Tier, Subscription Lifecycle, and Renewal Management. Use the 'Authorize' button with your JWT token to test endpoints.")

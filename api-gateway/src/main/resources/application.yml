@@ -49,6 +49,51 @@ spring:
           filters:
             - name: JwtAuthenticationFilter
 
+        # 5. OpenAPI Specs Routing for Centralized Gateway Swagger UI
+        - id: auth-docs
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/v3/api-docs/auth-service
+          filters:
+            - RewritePath=/v3/api-docs/auth-service, /v3/api-docs
+
+        - id: member-docs
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/v3/api-docs/member-service
+          filters:
+            - RewritePath=/v3/api-docs/member-service, /v3/api-docs
+
+        - id: subscription-docs
+          uri: lb://SUBSCRIPTION-SERVICE
+          predicates:
+            - Path=/v3/api-docs/subscription-service
+          filters:
+            - RewritePath=/v3/api-docs/subscription-service, /v3/api-docs
+
+        - id: attendance-docs
+          uri: lb://ATTENDANCE-SERVICE
+          predicates:
+            - Path=/v3/api-docs/attendance-service
+          filters:
+            - RewritePath=/v3/api-docs/attendance-service, /v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: 1. Auth Service (:8081 via Gateway)
+        url: /v3/api-docs/auth-service
+      - name: 2. Member Service (:8082 via Gateway)
+        url: /v3/api-docs/member-service
+      - name: 3. Subscription Service (:8083 via Gateway)
+        url: /v3/api-docs/subscription-service
+      - name: 4. Attendance Service (:8084 via Gateway)
+        url: /v3/api-docs/attendance-service
+
 eureka:
   client:
     service-url:
@@ -56,8 +101,11 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
   instance:
+    instance-id: ${spring.application.name}:${server.port}
     hostname: localhost
     prefer-ip-address: false
+    status-page-url-path: /swagger-ui.html
+    home-page-url-path: /
 
 jwt:
   secret: PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!

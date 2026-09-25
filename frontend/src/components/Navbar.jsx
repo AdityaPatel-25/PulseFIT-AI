@@ -1,13 +1,14 @@
 import React from 'react';
-import { Activity, Shield, Users, CreditCard, ScanLine, LogOut, LogIn, Cpu, Radio, LayoutDashboard, Briefcase, UserCheck, Sparkles } from 'lucide-react';
+import { Activity, Shield, Users, CreditCard, ScanLine, LogOut, LogIn, Cpu, Radio, LayoutDashboard, Briefcase, UserCheck, Sparkles, FileCode2 } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, user, onLogout, onOpenLogin, onSwitchRole, onOpenSignInPage, onOpenValidation }) {
+export default function Navbar({ activeTab, setActiveTab, user, onLogout, onOpenLogin, onSwitchRole, onOpenSignInPage, onOpenValidation, onOpenSwagger }) {
   const adminNavItems = [
     { id: 'turnstile', label: 'Turnstile Simulator', icon: ScanLine },
     { id: 'members', label: 'Members', icon: Users },
     { id: 'subscriptions', label: 'Subscriptions', icon: CreditCard },
     { id: 'attendance', label: 'Live Attendance', icon: Activity },
     { id: 'ai-hub', label: 'AI Innovations', icon: Sparkles },
+    { id: 'swagger', label: 'Swagger API Docs', icon: FileCode2 },
     { id: 'services', label: 'Service Mesh', icon: Cpu },
   ];
 
@@ -100,12 +101,22 @@ export default function Navbar({ activeTab, setActiveTab, user, onLogout, onOpen
           </button>
 
           <button
+            onClick={onOpenSwagger || (() => setActiveTab('swagger'))}
+            className="btn btn-secondary"
+            title="Open Interactive Swagger UI / OpenAPI 3 Explorer"
+            style={{ padding: '6px 12px', fontSize: '0.76rem', borderColor: 'rgba(16, 185, 129, 0.4)', color: '#34d399' }}
+          >
+            <FileCode2 size={13} color="#34d399" />
+            <span>Swagger UI</span>
+          </button>
+
+          <button
             onClick={onOpenValidation}
             className="btn btn-secondary"
             title="Open Database & JWT Validation Console"
-            style={{ padding: '6px 12px', fontSize: '0.76rem', borderColor: 'rgba(16, 185, 129, 0.35)', color: '#34d399' }}
+            style={{ padding: '6px 12px', fontSize: '0.76rem', borderColor: 'rgba(168, 85, 247, 0.35)', color: '#c084fc' }}
           >
-            <Shield size={13} color="#34d399" />
+            <Shield size={13} color="#c084fc" />
             <span>DB & Token Validation</span>
           </button>
 
