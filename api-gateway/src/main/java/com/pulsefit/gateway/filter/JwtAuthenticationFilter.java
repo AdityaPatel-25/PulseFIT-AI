@@ -48,10 +48,19 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             String username = jwtUtil.extractUsername(token);
             String role = jwtUtil.extractRole(token);
 
-            // Mutate request headers to propagate user identity downstream to microservices
+            // Mutate request headers: strip any client-supplied identity headers to prevent spoofing,
+            // and attach verified identity headers exclusively from the validated JWT claims.
             ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-                    .header("X-User-Name", username != null ? username : "")
-                    .header("X-User-Role", role != null ? role : "")
+                    .headers(httpHeaders -> {
+                        httpHeaders.remove("X-User-Name");
+                        httpHeaders.remove("X-User-Role");
+                        if (username != null && !username.isBlank()) {
+                            httpHeaders.set("X-User-Name", username);
+                        }
+                        if (role != null && !role.isBlank()) {
+                            httpHeaders.set("X-User-Role", role);
+                        }
+                    })
                     .build();
 
             return chain.filter(exchange.mutate().request(modifiedRequest).build());

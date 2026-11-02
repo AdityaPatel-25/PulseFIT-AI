@@ -84,6 +84,27 @@ services:
     networks:
       - pulsefit-net
 
+  # 5b. Member Service Replica (Port 8085 for Load Balancing)
+  member-service-replica:
+    build: ./member-service
+    container_name: pulsefit-member-replica
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pulsefit_member?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - pulsefit-net
+
   # 6. Subscription Service
   subscription-service:
     build: ./subscription-service

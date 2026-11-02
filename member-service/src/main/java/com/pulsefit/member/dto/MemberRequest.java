@@ -13,9 +13,17 @@ public class MemberRequest {
     @Size(min = 7, max = 25, message = "Contact must be between 7 and 25 characters")
     private String contact;
 
+    @jakarta.validation.constraints.Email(message = "Email must be a valid email address")
+    @Size(max = 100, message = "Email cannot exceed 100 characters")
     private String email;
+
+    @Size(max = 255, message = "Address cannot exceed 255 characters")
     private String address;
+
+    @Size(max = 25, message = "Emergency contact cannot exceed 25 characters")
     private String emergencyContact;
+
+    private String status;
 
     public MemberRequest() {}
 
@@ -25,6 +33,15 @@ public class MemberRequest {
         this.email = email;
         this.address = address;
         this.emergencyContact = emergencyContact;
+    }
+
+    public MemberRequest(String name, String contact, String email, String address, String emergencyContact, String status) {
+        this.name = name;
+        this.contact = contact;
+        this.email = email;
+        this.address = address;
+        this.emergencyContact = emergencyContact;
+        this.status = status;
     }
 
     public String getName() {
@@ -65,5 +82,13 @@ public class MemberRequest {
 
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

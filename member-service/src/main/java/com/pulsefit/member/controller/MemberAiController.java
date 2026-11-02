@@ -19,13 +19,9 @@ public class MemberAiController {
     }
 
     @GetMapping("/retention/{memberId}")
-    public ResponseEntity<?> getMemberRetentionInsights(@PathVariable("memberId") Long memberId) {
-        try {
-            MemberRetentionInsightDto insight = aiRetentionService.getMemberRetentionInsight(memberId);
-            return ResponseEntity.ok(insight);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+    public ResponseEntity<MemberRetentionInsightDto> getMemberRetentionInsights(@PathVariable("memberId") Long memberId) {
+        MemberRetentionInsightDto insight = aiRetentionService.getMemberRetentionInsight(memberId);
+        return ResponseEntity.ok(insight);
     }
 
     @GetMapping("/churn-report")

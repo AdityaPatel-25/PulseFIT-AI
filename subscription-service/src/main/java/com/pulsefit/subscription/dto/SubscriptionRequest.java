@@ -8,16 +8,31 @@ public class SubscriptionRequest {
     @NotNull(message = "Member ID is required")
     private Long memberId;
 
-    @NotNull(message = "Plan type is required")
-    private String planType; // BASIC_MONTHLY, PREMIUM_QUARTERLY, ALL_ACCESS_ANNUAL
+    @NotNull(message = "Plan ID is required")
+    private Long planId;
 
-    private LocalDate startDate; // Defaults to now if omitted
-    private Integer durationMonths; // Defaults based on plan if omitted
-    private String facilityTier; // SINGLE_FACILITY, MULTI_FACILITY
+    private LocalDate startDate; // Defaults to LocalDate.now() if omitted
+
+    // Optional fields for flexibility and backwards compatibility
+    private String planType;
+    private Integer durationMonths;
+    private String facilityTier;
     private Double price;
     private Boolean autoRenew;
 
     public SubscriptionRequest() {}
+
+    public SubscriptionRequest(Long memberId, Long planId) {
+        this.memberId = memberId;
+        this.planId = planId;
+        this.startDate = LocalDate.now();
+    }
+
+    public SubscriptionRequest(Long memberId, Long planId, LocalDate startDate) {
+        this.memberId = memberId;
+        this.planId = planId;
+        this.startDate = startDate;
+    }
 
     public SubscriptionRequest(Long memberId, String planType, LocalDate startDate, Integer durationMonths, String facilityTier, Double price, Boolean autoRenew) {
         this.memberId = memberId;
@@ -37,12 +52,12 @@ public class SubscriptionRequest {
         this.memberId = memberId;
     }
 
-    public String getPlanType() {
-        return planType;
+    public Long getPlanId() {
+        return planId;
     }
 
-    public void setPlanType(String planType) {
-        this.planType = planType;
+    public void setPlanId(Long planId) {
+        this.planId = planId;
     }
 
     public LocalDate getStartDate() {
@@ -51,6 +66,14 @@ public class SubscriptionRequest {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public String getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(String planType) {
+        this.planType = planType;
     }
 
     public Integer getDurationMonths() {

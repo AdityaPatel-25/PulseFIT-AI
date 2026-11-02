@@ -26,13 +26,23 @@ public class JwtUtil {
     }
 
     public String generateToken(String username, String role, String email) {
+        return generateToken(username, role, email, null);
+    }
+
+    public String generateToken(String username, String role, String email, Long memberId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
 
-        return Jwts.builder()
+        var builder = Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
-                .claim("email", email)
+                .claim("email", email);
+
+        if (memberId != null) {
+            builder.claim("memberId", memberId);
+        }
+
+        return builder
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -58,6 +68,14 @@ public class JwtUtil {
 
     public String extractEmail(String token) {
         return extractAllClaims(token).get("email", String.class);
+    }
+
+    public Long extractMemberId(String token) {
+        Object val = extractAllClaims(token).get("memberId");
+        if (val instanceof Number) {
+            return ((Number) val).longValue();
+        }
+        return null;
     }
 
     public Date extractExpiration(String token) {

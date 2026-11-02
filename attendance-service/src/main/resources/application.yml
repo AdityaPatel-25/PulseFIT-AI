@@ -27,3 +27,7 @@ eureka:
     prefer-ip-address: false
     status-page-url-path: /swagger-ui/index.html
     home-page-url-path: /
+
+jwt:
+  secret: ${JWT_SECRET:PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!}
+

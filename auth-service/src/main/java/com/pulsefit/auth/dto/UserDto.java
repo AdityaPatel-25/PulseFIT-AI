@@ -2,22 +2,33 @@ package com.pulsefit.auth.dto;
 
 import java.time.LocalDateTime;
 
+/**
+ * Safe user data transfer object that excludes sensitive credentials such as password hashes.
+ */
 public class UserDto {
     private Long id;
     private String username;
     private String email;
     private String role;
-    private String passwordHash;
+    private Long memberId;
     private LocalDateTime createdAt;
 
     public UserDto() {}
 
-    public UserDto(Long id, String username, String email, String role, String passwordHash, LocalDateTime createdAt) {
+    public UserDto(Long id, String username, String email, String role, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
-        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
+    }
+
+    public UserDto(Long id, String username, String email, String role, Long memberId, LocalDateTime createdAt) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.memberId = memberId;
         this.createdAt = createdAt;
     }
 
@@ -53,12 +64,12 @@ public class UserDto {
         this.role = role;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public Long getMemberId() {
+        return memberId;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     public LocalDateTime getCreatedAt() {

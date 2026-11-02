@@ -45,10 +45,10 @@ async function run() {
   await testLogin('STAFF with staff_john@pulsefit.com / staff123', 'staff_john@pulsefit.com', 'staff123');
   await testLogin('STAFF with staff@pulsefit.com / staff123', 'staff@pulsefit.com', 'staff123');
   await testLogin('STAFF with staff_john / staff123', 'staff_john', 'staff123');
-  await testLogin('MEMBER with alex@pulsefit.com / alex123', 'alex@pulsefit.com', 'alex123');
-  await testLogin('MEMBER with member_alex / alex123', 'member_alex', 'alex123');
-  await testLogin('MEMBER with member_alex / member123', 'member_alex', 'member123');
-  await testLogin('MEMBER with member_alex@pulsefit.com / member123', 'member_alex@pulsefit.com', 'member123');
+  await testLogin('REJECTED: MEMBER with alex@pulsefit.com / alex123 (Removed Backdoor)', 'alex@pulsefit.com', 'alex123');
+  await testLogin('REJECTED: MEMBER with member_alex / alex123 (Removed Backdoor)', 'member_alex', 'alex123');
+  await testLogin('VALID: MEMBER with member_alex / member123 (BCrypt Hash)', 'member_alex', 'member123');
+  await testLogin('VALID: MEMBER with alex@pulsefit.com / member123 (BCrypt Hash)', 'alex@pulsefit.com', 'member123');
   console.log('\n=== DONE ===');
 }
 

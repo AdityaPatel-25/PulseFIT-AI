@@ -5,6 +5,9 @@ spring:
   application:
     name: api-gateway
   cloud:
+    loadbalancer:
+      cache:
+        ttl: 2s
     gateway:
       globalcors:
         corsConfigurations:
@@ -38,6 +41,14 @@ spring:
           uri: lb://SUBSCRIPTION-SERVICE
           predicates:
             - Path=/api/subscriptions/**
+          filters:
+            - name: JwtAuthenticationFilter
+
+        # 3b. Membership Plans Routes (Protected with JWT filter - routes to Subscription Service)
+        - id: subscription-plans-service
+          uri: lb://SUBSCRIPTION-SERVICE
+          predicates:
+            - Path=/api/plans/**
           filters:
             - name: JwtAuthenticationFilter
 
@@ -100,6 +111,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+    registry-fetch-interval-seconds: 3
   instance:
     instance-id: ${spring.application.name}:${server.port}
     hostname: localhost
@@ -108,4 +120,4 @@ eureka:
     home-page-url-path: /
 
 jwt:
-  secret: PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!
+  secret: ${JWT_SECRET:PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!}

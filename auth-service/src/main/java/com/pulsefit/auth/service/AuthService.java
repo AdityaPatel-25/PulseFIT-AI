@@ -7,6 +7,7 @@ import com.pulsefit.auth.dto.TokenValidationResponse;
 import com.pulsefit.auth.model.User;
 import com.pulsefit.auth.repository.UserRepository;
 import com.pulsefit.auth.security.JwtUtil;
+import com.pulsefit.auth.dto.ChangePasswordRequest;
 import com.pulsefit.auth.dto.ResetPasswordRequest;
 import com.pulsefit.auth.dto.SocialLoginRequest;
 import com.pulsefit.auth.dto.UserDto;
@@ -54,17 +55,22 @@ public class AuthService {
                 username,
                 passwordEncoder.encode(request.getPassword()),
                 email,
-                role
+                role,
+                request.getMemberId()
         );
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail(), user.getMemberId());
         return new AuthResponse(token, user.getUsername(), user.getEmail(), user.getRole(), jwtUtil.getExpirationMs());
     }
 
     public AuthResponse login(LoginRequest request) {
         String identifier = request.getUsername() != null ? request.getUsername().trim() : "";
+        if (identifier.isBlank() || request.getPassword() == null) {
+            throw new IllegalArgumentException("Wrong username or password");
+        }
+
         Optional<User> userOpt = userRepository.findByUsername(identifier);
         if (userOpt.isEmpty()) {
             userOpt = userRepository.findByEmail(identifier);
@@ -75,25 +81,19 @@ public class AuthService {
         if (userOpt.isEmpty() && identifier.contains("@")) {
             String prefix = identifier.substring(0, identifier.indexOf("@"));
             userOpt = userRepository.findByUsername(prefix);
-            if (userOpt.isEmpty() && prefix.contains("alex")) {
-                userOpt = userRepository.findByUsername("member_alex");
-            }
         }
         if (userOpt.isEmpty()) {
             throw new IllegalArgumentException("Wrong username or password");
         }
 
         User user = userOpt.get();
-        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword())
-                || ("member_alex".equals(user.getUsername()) && ("member123".equals(request.getPassword()) || "alex123".equals(request.getPassword())))
-                || ("staff_john".equals(user.getUsername()) && "staff123".equals(request.getPassword()))
-                || ("admin".equals(user.getUsername()) && "admin123".equals(request.getPassword()));
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!passwordMatches) {
             throw new IllegalArgumentException("Wrong username or password");
         }
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail(), user.getMemberId());
         return new AuthResponse(token, user.getUsername(), user.getEmail(), user.getRole(), jwtUtil.getExpirationMs());
     }
 
@@ -147,7 +147,7 @@ public class AuthService {
             userRepository.save(user);
         }
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getEmail(), user.getMemberId());
         return new AuthResponse(token, user.getUsername(), user.getEmail(), user.getRole(), jwtUtil.getExpirationMs());
     }
 
@@ -158,7 +158,7 @@ public class AuthService {
                         u.getUsername(),
                         u.getEmail(),
                         u.getRole(),
-                        u.getPassword(),
+                        u.getMemberId(),
                         u.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
@@ -182,30 +182,30 @@ public class AuthService {
         }
     }
 
-    public Map<String, Object> resetPassword(ResetPasswordRequest request) {
-        String identifier = request.getIdentifier() != null ? request.getIdentifier().trim() : "";
-        if (identifier.isBlank()) {
-            throw new IllegalArgumentException("Username or email is required");
-        }
-        Optional<User> userOpt = userRepository.findByUsername(identifier);
-        if (userOpt.isEmpty()) {
-            userOpt = userRepository.findByEmail(identifier);
-        }
-        if (userOpt.isEmpty()) {
-            userOpt = userRepository.findByEmail(identifier.toLowerCase());
-        }
-        if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("No account found matching: " + identifier);
+    public Map<String, Object> changePassword(String authenticatedUsername, ChangePasswordRequest request) {
+        if (authenticatedUsername == null || authenticatedUsername.isBlank()) {
+            throw new IllegalArgumentException("Authentication required");
         }
 
-        User user = userOpt.get();
+        User user = userRepository.findByUsername(authenticatedUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Authenticated user account not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current password does not match");
+        }
+
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
 
         return Map.of(
-                "message", "Password reset successfully for user: " + user.getUsername(),
-                "username", user.getUsername(),
-                "email", user.getEmail()
+                "message", "Password changed successfully for user: " + user.getUsername(),
+                "username", user.getUsername()
+        );
+    }
+
+    public Map<String, Object> resetPassword(ResetPasswordRequest request) {
+        throw new UnsupportedOperationException(
+                "Unauthenticated password reset is disabled for security. Please use authenticated password change at /api/auth/change-password."
         );
     }
 }

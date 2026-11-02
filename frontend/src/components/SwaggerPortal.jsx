@@ -217,7 +217,7 @@ export default function SwaggerPortal({ user }) {
                 Staff Token
               </button>
               <button 
-                onClick={() => handleQuickLogin('member_alex', 'alex123')}
+                onClick={() => handleQuickLogin('member_alex', 'member123')}
                 className="btn btn-secondary" 
                 style={{ padding: '4px 10px', fontSize: '0.72rem', borderColor: 'rgba(16, 185, 129, 0.35)', color: '#34d399' }}
               >

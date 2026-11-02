@@ -387,7 +387,7 @@ export function LoginPage({ onBack, onLoginSuccess }: LoginPageProps = {}) {
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickRole('member_alex', 'alex123', 'alex@pulsefit.com')}
+                onClick={() => handleQuickRole('member_alex', 'member123', 'alex@pulsefit.com')}
                 className="px-2 py-1.5 text-xs font-black rounded-lg border-2 border-emerald-500 bg-emerald-100 text-black hover:bg-emerald-200 transition-all text-center shadow-sm"
               >
                 🏃 Member

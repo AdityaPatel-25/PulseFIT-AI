@@ -17,7 +17,7 @@
 							"script": {
 								"exec": [
 									"var jsonData = pm.response.json();",
-									"if (jsonData.token) {",
+									"if(jsonData.token) {",
 									"    pm.environment.set(\"jwt_token\", jsonData.token);",
 									"    console.log(\"Saved JWT token for user: \" + jsonData.username);",
 									"}"
@@ -204,6 +204,100 @@
 							"raw": "{{base_url}}/api/members",
 							"host": ["{{base_url}}"],
 							"path": ["api", "members"]
+						}
+					}
+				},
+				{
+					"name": "Update Member Profile (#1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alex Mercer Updated\",\n  \"contact\": \"+1-555-0192\",\n  \"email\": \"alex.updated@pulsefit.com\",\n  \"address\": \"742 Evergreen Terrace, Springfield\",\n  \"emergencyContact\": \"+1-555-9988\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/members/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "1"]
+						}
+					}
+				},
+				{
+					"name": "Check Member Active Status (#1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/members/1/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "1", "status"]
+						}
+					}
+				},
+				{
+					"name": "Deactivate Member (#1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"url": {
+							"raw": "{{base_url}}/api/members/1/deactivate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "1", "deactivate"]
+						}
+					}
+				},
+				{
+					"name": "Delete Member (#4)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/api/members/4",
+							"host": ["{{base_url}}"],
+							"path": ["api", "members", "4"]
 						}
 					}
 				}

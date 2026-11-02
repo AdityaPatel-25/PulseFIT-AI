@@ -29,5 +29,5 @@ eureka:
     home-page-url-path: /
 
 jwt:
-  secret: PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!
+  secret: ${JWT_SECRET:PulseFitSuperSecretKeyForJWTHMACSHA256EnterpriseSecurity2024!}
   expiration-ms: 86400000 # 24 hours

@@ -21,7 +21,7 @@ public class AiRetentionService {
 
     public MemberRetentionInsightDto getMemberRetentionInsight(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found with ID: " + memberId));
+                .orElseThrow(() -> new com.pulsefit.member.exception.ResourceNotFoundException("Member not found with ID: " + memberId));
 
         return buildInsightForMember(member);
     }

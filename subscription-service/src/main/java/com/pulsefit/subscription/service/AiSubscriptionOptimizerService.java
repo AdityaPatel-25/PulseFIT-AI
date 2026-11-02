@@ -2,7 +2,8 @@ package com.pulsefit.subscription.service;
 
 import com.pulsefit.subscription.dto.GracePeriodResultDto;
 import com.pulsefit.subscription.dto.PlanOptimizationDto;
-import com.pulsefit.subscription.model.Subscription;
+import com.pulsefit.subscription.entity.Subscription;
+import com.pulsefit.subscription.exception.ResourceNotFoundException;
 import com.pulsefit.subscription.repository.SubscriptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class AiSubscriptionOptimizerService {
 
     public GracePeriodResultDto grantGracePeriod(Long subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found with ID: " + subscriptionId));
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with ID: " + subscriptionId));
 
         // Extend expiry by 48 hours as a courtesy window
         LocalDate newExpiry = LocalDate.now().plusDays(2);

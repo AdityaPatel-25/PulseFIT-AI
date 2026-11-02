@@ -41,7 +41,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const rolePresets = [
     { user: 'admin', pass: 'admin123', icon: '👑', label: 'Admin', sub: 'Command Center', color: '#a78bfa' },
     { user: 'staff_john', pass: 'staff123', icon: '🧑‍💼', label: 'Staff', sub: 'Front-Desk Window', color: '#22d3ee' },
-    { user: 'member_alex', pass: 'alex123', icon: '🏃', label: 'Member', sub: 'Personal Portal', color: '#34d399' },
+    { user: 'member_alex', pass: 'member123', icon: '🏃', label: 'Member', sub: 'Personal Portal', color: '#34d399' },
   ];
 
   return (

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/check-in")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or (hasRole('MEMBER') and @securityEvaluator.canAccessMember(#request.memberId))")
     public ResponseEntity<TurnstileResult> checkIn(@Valid @RequestBody CheckInRequest request) {
         TurnstileResult result = attendanceService.processCheckIn(request);
         if (result.isGranted()) {
@@ -36,6 +38,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/check-out")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or (hasRole('MEMBER') and (#request.memberId == null or @securityEvaluator.canAccessMember(#request.memberId)))")
     public ResponseEntity<?> checkOut(@Valid @RequestBody CheckOutRequest request) {
         try {
             AttendanceResponse response = attendanceService.processCheckOut(request);
@@ -46,16 +49,19 @@ public class AttendanceController {
     }
 
     @GetMapping("/member/{memberId}")
+    @PreAuthorize("@securityEvaluator.canAccessMember(#memberId)")
     public ResponseEntity<List<AttendanceResponse>> getMemberAttendance(@PathVariable("memberId") Long memberId) {
         return ResponseEntity.ok(attendanceService.getAttendanceForMember(memberId));
     }
 
     @GetMapping("/recent")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'MEMBER')")
     public ResponseEntity<List<AttendanceResponse>> getRecentAttendance() {
         return ResponseEntity.ok(attendanceService.getRecentAttendance());
     }
 
     @GetMapping("/facility/{facilityId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'MEMBER')")
     public ResponseEntity<List<AttendanceResponse>> getFacilityDailyTraffic(
             @PathVariable("facilityId") String facilityId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

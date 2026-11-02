@@ -19,6 +19,7 @@ public class RegisterRequest {
     private String email;
 
     private String role; // Optional: default ROLE_MEMBER
+    private Long memberId; // Optional: associated gym member profile ID
 
     public RegisterRequest() {}
 
@@ -27,6 +28,14 @@ public class RegisterRequest {
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public RegisterRequest(String username, String password, String email, String role, Long memberId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.memberId = memberId;
     }
 
     public String getUsername() {
@@ -59,5 +68,13 @@ public class RegisterRequest {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 }

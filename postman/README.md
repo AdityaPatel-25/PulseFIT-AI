@@ -51,6 +51,7 @@ All subsequent requests automatically inherit the `{{jwt_token}}` variable:
 - **Get All Subscriptions**: `GET {{base_url}}/api/subscriptions`
 - **Get Subscriptions for Member 1**: `GET {{base_url}}/api/subscriptions/member/1`
 - **Create Subscription**: `POST {{base_url}}/api/subscriptions`
+- **Cancel/Delete Subscription**: `DELETE {{base_url}}/api/subscriptions/1`
 
 #### ⚡ Attendance & Turnstile Service (`/api/attendance/**`)
 - **Get Turnstile Access History**: `GET {{base_url}}/api/attendance/recent`
